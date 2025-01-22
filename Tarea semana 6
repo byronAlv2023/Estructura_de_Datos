@@ -1,0 +1,109 @@
+using System;
+
+// Clase Nodo que representa un elemento en la lista enlazada
+public class Nodo
+{
+    public int Valor; // Valor del nodo
+    public Nodo Siguiente; // Referencia al siguiente nodo
+
+    public Nodo(int valor)
+    {
+        Valor = valor;
+        Siguiente = null; // Inicialmente, el siguiente es null
+    }
+}
+
+// Clase ListaEnlazada que gestiona la lista
+public class ListaEnlazada
+{
+    private Nodo cabeza; // Nodo cabeza de la lista
+
+    // Método para agregar un nuevo nodo al final de la lista
+    public void Agregar(int valor)
+    {
+        Nodo nuevoNodo = new Nodo(valor);
+        if (cabeza == null)
+        {
+            cabeza = nuevoNodo; // Si la lista está vacía, el nuevo nodo es la cabeza
+        }
+        else
+        {
+            Nodo actual = cabeza;
+            while (actual.Siguiente != null)
+            {
+                actual = actual.Siguiente; // Navegar hasta el final de la lista
+            }
+            actual.Siguiente = nuevoNodo; // Enlazar el nuevo nodo
+        }
+    }
+
+    // Método para eliminar nodos fuera de un rango
+    public void EliminarFueraDeRango(int min, int max)
+    {
+        Nodo actual = cabeza;
+        Nodo anterior = null;
+
+        while (actual != null)
+        {
+            // Verificar si el valor está fuera del rango
+            if (actual.Valor < min || actual.Valor > max)
+            {
+                if (anterior == null)
+                {
+                    cabeza = actual.Siguiente; // Si es la cabeza, moverse a la siguiente
+                }
+                else
+                {
+                    anterior.Siguiente = actual.Siguiente; // Eliminar el nodo actual
+                }
+            }
+            else
+            {
+                anterior = actual; // Mover el nodo anterior
+            }
+            actual = actual.Siguiente; // Mover al siguiente nodo
+        }
+    }
+
+    // Método para mostrar la lista
+    public void MostrarLista()
+    {
+        Nodo actual = cabeza;
+        while (actual != null)
+        {
+            Console.Write(actual.Valor + " ");
+            actual = actual.Siguiente;
+        }
+        Console.WriteLine();
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        ListaEnlazada lista = new ListaEnlazada();
+        Random random = new Random();
+
+        // Generar 50 números aleatorios entre 1 y 999
+        for (int i = 0; i < 50; i++)
+        {
+            lista.Agregar(random.Next(1, 1000));
+        }
+
+        Console.WriteLine("Lista original:");
+        lista.MostrarLista();
+
+        // Leer el rango del usuario
+        Console.WriteLine("Ingrese el valor mínimo del rango:");
+        int min = int.Parse(Console.ReadLine());
+        Console.WriteLine("Ingrese el valor máximo del rango:");
+        int max = int.Parse(Console.ReadLine());
+
+        // Eliminar nodos fuera del rango
+        lista.EliminarFueraDeRango(min, max);
+
+        Console.WriteLine("Lista después de eliminar nodos fuera del rango:");
+        lista.MostrarLista();
+    }
+}
