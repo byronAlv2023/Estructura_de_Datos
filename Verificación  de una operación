@@ -1,0 +1,74 @@
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        // Expresión a verificar
+        string expression = "{7+(8*5)-[(9-7)+(4+1)]}";
+        // Llama a la función IsBalanced y muestra el resultado
+        if (IsBalanced(expression))
+        {
+            Console.WriteLine("La fórmula está balanceada.");
+        }
+        else
+        {
+            Console.WriteLine("La fórmula no está balanceada.");
+        }
+    }
+
+    /// <summary>
+    /// Verifica si la expresión matemática tiene paréntesis, corchetes y llaves balanceados.
+    /// </summary>
+    /// <param name="expression">La expresión a verificar.</param>
+    /// <returns>True si está balanceada, False en caso contrario.</returns>
+    static bool IsBalanced(string expression)
+    {
+        // Crea una pila para almacenar los caracteres de apertura
+        Stack<char> stack = new Stack<char>();
+        
+        // Recorre cada carácter en la expresión
+        foreach (char c in expression)
+        {
+            // Si se encuentra un carácter de apertura, se apila
+            if (c == '{' || c == '(' || c == '[')
+            {
+                stack.Push(c);
+            }
+            // Si se encuentra un carácter de cierre
+            else if (c == '}' || c == ')' || c == ']')
+            {
+                // Verifica si la pila está vacía (sin paréntesis de apertura)
+                if (stack.Count == 0)
+                {
+                    return false; // No está balanceada
+                }
+
+                // Desapila el último carácter de apertura
+                char top = stack.Pop();
+                // Verifica si el par de apertura y cierre coincide
+                if (!IsMatchingPair(top, c))
+                {
+                    return false; // No está balanceada
+                }
+            }
+        }
+
+        // Si la pila está vacía al final, la expresión está balanceada
+        return stack.Count == 0;
+    }
+
+    /// <summary>
+    /// Comprueba si un par de caracteres de apertura y cierre son coincidentes.
+    /// </summary>
+    /// <param name="opening">El carácter de apertura.</param>
+    /// <param name="closing">El carácter de cierre.</param>
+    /// <returns>True si son coincidentes, False en caso contrario.</returns>
+    static bool IsMatchingPair(char opening, char closing)
+    {
+        return (opening == '(' && closing == ')') ||
+               (opening == '{' && closing == '}') ||
+               (opening == '[' && closing == ']');
+    }
+}
