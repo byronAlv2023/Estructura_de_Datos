@@ -1,0 +1,75 @@
+using System;
+using System.Collections.Generic;
+
+class NavegadorWeb
+{
+    private Stack<string> historial = new Stack<string>();
+    private Stack<string> adelante = new Stack<string>();
+    private string paginaActual;
+
+    public void VisitarPagina(string url)
+    {
+        if (paginaActual != null)
+        {
+            historial.Push(paginaActual);
+            adelante.Clear(); // Se limpia la pila de adelante cuando se visita una nueva página
+        }
+        paginaActual = url;
+        Console.WriteLine($"Visitando: {paginaActual}");
+    }
+
+    public void Retroceder()
+    {
+        if (historial.Count > 0)
+        {
+            adelante.Push(paginaActual);
+            paginaActual = historial.Pop();
+            Console.WriteLine($"Retrocediendo a: {paginaActual}");
+        }
+        else
+        {
+            Console.WriteLine("No hay páginas anteriores.");
+        }
+    }
+
+    public void Avanzar()
+    {
+        if (adelante.Count > 0)
+        {
+            historial.Push(paginaActual);
+            paginaActual = adelante.Pop();
+            Console.WriteLine($"Avanzando a: {paginaActual}");
+        }
+        else
+        {
+            Console.WriteLine("No hay páginas para avanzar.");
+        }
+    }
+
+    public void MostrarHistorial()
+    {
+        Console.WriteLine("Historial de navegación:");
+        foreach (var pagina in historial)
+        {
+            Console.WriteLine(pagina);
+        }
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        NavegadorWeb navegador = new NavegadorWeb();
+
+        navegador.VisitarPagina("https://www.google.com");
+        navegador.VisitarPagina("https://www.github.com");
+        navegador.VisitarPagina("https://www.microsoft.com");
+
+        navegador.Retroceder();
+        navegador.Retroceder();
+        navegador.Avanzar();
+
+        navegador.MostrarHistorial();
+    }
+}
