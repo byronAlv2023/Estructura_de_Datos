@@ -1,0 +1,90 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+class Program
+{
+    static void Main()
+    {
+        // Lista de nombres ficticios para los ciudadanos
+        List<string> nombres = new List<string>
+        {
+            "Juan", "Maria", "Pedro", "Ana", "Luis", "Laura", "Carlos", "Sofia",
+            "Jose", "Isabel", "Javier", "Carmen", "Francisco", "Patricia",
+            "David", "Lucia", "Daniel", "Elena", "Fernando", "Gabriela",
+            "Andres", "Valeria", "Diego", "Claudia", "Alejandro", "Marta",
+            "Ricardo", "Teresa", "Rafael", "Natalia", "Samuel", "Mariana",
+            "Victor", "Paola", "Hugo", "Veronica", "Miguel", "Cristina",
+            "Oscar", "Silvia", "Jorge", "Diana", "Esteban", "Rosa",
+            "Arturo", "Cecilia", "Raul", "Pamela", "Gustavo", "Lorena",
+            "Leonardo", "Nadia", "Pablo", "Alicia", "Sergio", "Ines"
+        };
+
+        // Generar un conjunto ficticio de 500 ciudadanos
+        HashSet<string> ciudadanos = new HashSet<string>();
+        Random random = new Random();
+        for (int i = 1; i <= 500; i++)
+        {
+            var nombre = nombres[random.Next(nombres.Count)];
+            ciudadanos.Add($"{nombre} {i}"); // Asignar un número para diferenciarlos
+        }
+
+        // Crear un conjunto ficticio de 75 ciudadanos vacunados con Pfizer
+        HashSet<string> vacunadosPfizer = new HashSet<string>();
+        for (int i = 1; i <= 75; i++)
+        {
+            var nombre = nombres[random.Next(nombres.Count)];
+            vacunadosPfizer.Add($"{nombre} {i}"); // Asignar un número para diferenciarlos
+        }
+
+        // Crear un conjunto ficticio de 75 ciudadanos vacunados con AstraZeneca
+        HashSet<string> vacunadosAstraZeneca = new HashSet<string>();
+        for (int i = 76; i <= 150; i++)
+        {
+            var nombre = nombres[random.Next(nombres.Count)];
+            vacunadosAstraZeneca.Add($"{nombre} {i}"); // Asignar un número para diferenciarlos
+        }
+
+        // Listado de ciudadanos que no se han vacunado
+        HashSet<string> noVacunados = new HashSet<string>(ciudadanos);
+        noVacunados.ExceptWith(vacunadosPfizer); // Eliminar los vacunados con Pfizer
+        noVacunados.ExceptWith(vacunadosAstraZeneca); // Eliminar los vacunados con AstraZeneca
+
+        // Listado de ciudadanos que han recibido ambas vacunas
+        HashSet<string> vacunadosTotal = new HashSet<string>(vacunadosPfizer);
+        vacunadosTotal.UnionWith(vacunadosAstraZeneca); // Unión de ambos conjuntos
+
+        // Listado de ciudadanos que solamente han recibido la vacuna de Pfizer
+        HashSet<string> soloPfizer = new HashSet<string>(vacunadosPfizer);
+        soloPfizer.ExceptWith(vacunadosAstraZeneca); // Eliminar los que también están en AstraZeneca
+
+        // Listado de ciudadanos que solamente han recibido la vacuna de AstraZeneca
+        HashSet<string> soloAstraZeneca = new HashSet<string>(vacunadosAstraZeneca);
+        soloAstraZeneca.ExceptWith(vacunadosPfizer); // Eliminar los que también están en Pfizer
+
+        // Imprimir resultados
+        Console.WriteLine("Ciudadanos no vacunados:");
+        foreach (var ciudadano in noVacunados)
+        {
+            Console.WriteLine(ciudadano);
+        }
+
+        Console.WriteLine("\nCiudadanos que han recibido ambas vacunas:");
+        foreach (var ciudadano in vacunadosTotal)
+        {
+            Console.WriteLine(ciudadano);
+        }
+
+        Console.WriteLine("\nCiudadanos que solamente han recibido la vacuna de Pfizer:");
+        foreach (var ciudadano in soloPfizer)
+        {
+            Console.WriteLine(ciudadano);
+        }
+
+        Console.WriteLine("\nCiudadanos que solamente han recibido la vacuna de AstraZeneca:");
+        foreach (var ciudadano in soloAstraZeneca)
+        {
+            Console.WriteLine(ciudadano);
+        }
+    }
+}
