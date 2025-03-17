@@ -1,0 +1,89 @@
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        // Inicializa un catálogo de revistas
+        List<string> catalogo = new List<string>
+        {
+            "Mundo Nuevo",
+            "American pay",
+            "Tiempo Arriba",
+            "Flores del Barrio",
+            "Nada en el Rio",
+            "Todos contra Ray",
+            "Manejo de Avioneta",
+            "Solo la Tierra",
+            "Los Sovieticos",
+            "Escritorio Virtual"
+        };
+        
+        while (true)
+        {
+            // Muestra el menú de opciones
+            MostrarMenu();
+            string opcion = Console.ReadLine();
+            if (opcion == "3") break; // Sale del bucle si la opción es 3
+
+            // Solicita al usuario el título de la revista
+            Console.Write("Ingrese el título de la revista a buscar: ");
+            string titulo = Console.ReadLine();
+
+            // Realiza la búsqueda según la opción seleccionada
+            bool encontrado = opcion switch
+            {
+                "1" => BusquedaIterativa(catalogo, titulo),  // Búsqueda iterativa
+                "2" => BusquedaRecursiva(catalogo, titulo, 0), // Búsqueda recursiva
+                _ => InvalidarOpcion() // Manejo de opción no válida
+            };
+
+            // Muestra el resultado de la búsqueda
+            Console.WriteLine(encontrado ? "Encontrado" : "No encontrado");
+        }
+    }
+
+    // Método para mostrar el menú de opciones
+    static void MostrarMenu()
+    {
+        Console.WriteLine("\nMenú de búsqueda de revistas:");
+        Console.WriteLine("1. Buscar un título (Búsqueda Iterativa)");
+        Console.WriteLine("2. Buscar un título (Búsqueda Recursiva)");
+        Console.WriteLine("3. Salir");
+        Console.Write("Seleccione una opción: ");
+    }
+
+    // Método que maneja una opción no válida
+    static bool InvalidarOpcion()
+    {
+        Console.WriteLine("Opción no válida. Intente nuevamente.");
+        return false;
+    }
+
+    // Método para realizar búsqueda iterativa
+    static bool BusquedaIterativa(List<string> catalogo, string titulo)
+    {
+        // Recorre cada revista en el catálogo
+        foreach (var revista in catalogo)
+        {
+            // Compara el título de la revista sin importar mayúsculas o minúsculas
+            if (revista.Equals(titulo, StringComparison.OrdinalIgnoreCase))
+            {
+                return true; // Título encontrado
+            }
+        }
+        return false; // Título no encontrado
+    }
+
+    // Método para realizar búsqueda recursiva
+    static bool BusquedaRecursiva(List<string> catalogo, string titulo, int index)
+    {
+        // Caso base: si el índice es igual o mayor que la cantidad de revistas
+        if (index >= catalogo.Count) return false;
+        // Compara el título de la revista sin importar mayúsculas o minúsculas
+        if (catalogo[index].Equals(titulo, StringComparison.OrdinalIgnoreCase)) return true;
+        // Llama a la función recursivamente con el siguiente índice
+        return BusquedaRecursiva(catalogo, titulo, index + 1);
+    }
+}
