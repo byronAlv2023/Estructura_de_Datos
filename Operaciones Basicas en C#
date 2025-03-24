@@ -1,0 +1,153 @@
+using System;
+
+// Clase que representa un nodo en el árbol binario
+class Node
+{
+    public int Data; // Datos almacenados en el nodo
+    public Node Left, Right; // Punteros a los nodos izquierdo y derecho
+
+    // Constructor para crear un nuevo nodo
+    public Node(int data)
+    {
+        Data = data;
+        Left = Right = null; // Inicializa los punteros a null
+    }
+}
+
+// Clase que representa el árbol binario
+class BinaryTree
+{
+    public Node Root; // Raíz del árbol
+
+    // Método para insertar un nuevo valor en el árbol
+    public void Insert(int data)
+    {
+        Root = InsertRec(Root, data); // Llama a la función recursiva para insertar
+    }
+
+    // Función recursiva para insertar un nuevo nodo en el árbol
+    private Node InsertRec(Node root, int data)
+    {
+        // Si el árbol está vacío, crea un nuevo nodo
+        if (root == null)
+        {
+            return new Node(data);
+        }
+
+        // Decide en qué subárbol insertar el nuevo nodo
+        if (data < root.Data)
+        {
+            root.Left = InsertRec(root.Left, data); // Inserta en el subárbol izquierdo
+        }
+        else
+        {
+            root.Right = InsertRec(root.Right, data); // Inserta en el subárbol derecho
+        }
+
+        return root; // Retorna la raíz del árbol
+    }
+
+    // Método para buscar un valor en el árbol
+    public bool Search(int data)
+    {
+        return SearchRec(Root, data); // Llama a la función recursiva para buscar
+    }
+
+    // Función recursiva para buscar un nodo en el árbol
+    private bool SearchRec(Node root, int data)
+    {
+        // Si el nodo actual es null, el valor no se encontró
+        if (root == null)
+        {
+            return false; // No encontrado
+        }
+
+        // Si el valor es igual al nodo actual, se encontró
+        if (root.Data == data)
+        {
+            return true; // Encontrado
+        }
+
+        // Busca en el subárbol izquierdo o derecho dependiendo del valor
+        return data < root.Data ? SearchRec(root.Left, data) : SearchRec(root.Right, data);
+    }
+
+    // Método para realizar un recorrido en orden del árbol
+    public void InOrder()
+    {
+        InOrderRec(Root); // Llama a la función recursiva para el recorrido
+        Console.WriteLine(); // Añade una nueva línea al final
+    }
+
+    // Función recursiva para el recorrido en orden
+    private void InOrderRec(Node root)
+    {
+        // Si el nodo actual no es null, realiza el recorrido
+        if (root != null)
+        {
+            InOrderRec(root.Left); // Recorre el subárbol izquierdo
+            Console.Write(root.Data + " "); // Imprime el dato del nodo actual
+            InOrderRec(root.Right); // Recorre el subárbol derecho
+        }
+    }
+}
+
+// Clase principal del programa
+class Program
+{
+    static void Main(string[] args)
+    {
+        BinaryTree tree = new BinaryTree(); // Crea una nueva instancia del árbol
+        int choice, data; // Variables para almacenar la opción del menú y los datos
+
+        // Bucle principal para mostrar el menú y manejar las operaciones
+        while (true)
+        {
+            // Muestra el menú
+            Console.WriteLine("\n--- Menu ---");
+            Console.WriteLine("1. Insertar un numero");
+            Console.WriteLine("2. Buscar un numero");
+            Console.WriteLine("3. Recorrido en orden");
+            Console.WriteLine("4. Salir");
+            Console.Write("Selecciona una opcion: ");
+            choice = int.Parse(Console.ReadLine()); // Lee la opción del usuario
+
+            switch (choice)
+            {
+                case 1:
+                    // Opción para insertar un número
+                    Console.Write("Ingresa el numero a insertar: ");
+                    data = int.Parse(Console.ReadLine()); // Lee el número a insertar
+                    tree.Insert(data); // Inserta el número en el árbol
+                    Console.WriteLine($"Numero {data} insertado.");
+                    break;
+                case 2:
+                    // Opción para buscar un número
+                    Console.Write("Ingresa el numero a buscar: ");
+                    data = int.Parse(Console.ReadLine()); // Lee el número a buscar
+                    if (tree.Search(data))
+                    {
+                        Console.WriteLine($"Numero {data} encontrado."); // Si se encuentra
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Numero {data} no encontrado."); // Si no se encuentra
+                    }
+                    break;
+                case 3:
+                    // Opción para realizar un recorrido en orden
+                    Console.Write("Recorrido en orden: ");
+                    tree.InOrder(); // Muestra el recorrido en orden
+                    break;
+                case 4:
+                    // Opción para salir
+                    Console.WriteLine("Saliendo...");
+                    return; // Termina el programa
+                default:
+                    // Opción no válida
+                    Console.WriteLine("Opcion no valida. Intenta de nuevo.");
+                    break;
+            }
+        }
+    }
+}
